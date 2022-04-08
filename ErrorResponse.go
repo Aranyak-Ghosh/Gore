@@ -82,3 +82,15 @@ func TransactionForbiddenException(e error, transactionId, correlationId string)
 		err:           e,
 	}
 }
+
+func NewException(e error, errorMessage, errorDetails, transactionId, correlationId string, statusCode, errorCoder int) *ErrorResponse {
+	return &ErrorResponse{
+		err:           e,
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		StatusCode:    statusCode,
+		ErrorCode:     errorCoder,
+		ErrorMessage:  errorMessage,
+		ErrorDetails:  errorDetails,
+	}
+}
