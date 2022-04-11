@@ -21,6 +21,13 @@ const (
 	EntityValidationError
 	EntityUnauthorizedError
 	TransactionForbiddenError
+	GatewayError
+	MethodNotAllowedError
+	ServerOverburdenedError
+	GatewayTimeoutError
+	InternalServalError
+	EntityGoneError
+	EntityConflictError
 )
 
 func (err *ErrorResponse) Error() string {
@@ -47,6 +54,89 @@ func EntityValidationException(e error, transactionId, correlationId string) *Er
 	}
 }
 
+func GatewayException(e error, transactionId, correlationId string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode:    http.StatusBadGateway,
+		ErrorCode:     GatewayError,
+		ErrorMessage:  "GatewayError",
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		ErrorDetails:  e.Error(),
+		err:           e,
+	}
+}
+
+func MethodNotAllowedException(e error, transactionId, correlationId string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode:    http.StatusMethodNotAllowed,
+		ErrorCode:     MethodNotAllowedError,
+		ErrorMessage:  "MethodNotAllowedError",
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		ErrorDetails:  e.Error(),
+		err:           e,
+	}
+}
+
+func ServerOverburdenedException(e error, transactionId, correlationId string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode:    http.StatusServiceUnavailable,
+		ErrorCode:     ServerOverburdenedError,
+		ErrorMessage:  "ServerOverburdenedError", //this status usually means server is overburdened with requests or under maintenance
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		ErrorDetails:  e.Error(),
+		err:           e,
+	}
+}
+
+func GatewayTimeoutException(e error, transactionId, correlationId string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode:    http.StatusGatewayTimeout,
+		ErrorCode:     GatewayTimeoutError,
+		ErrorMessage:  "GatewayTimeoutError",
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		ErrorDetails:  e.Error(),
+		err:           e,
+	}
+}
+
+func InternalServerException(e error, transactionId, correlationId string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode:    http.StatusInternalServerError,
+		ErrorCode:     InternalServalError, //check server logs
+		ErrorMessage:  "InternalServalError",
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		ErrorDetails:  e.Error(),
+		err:           e,
+	}
+}
+
+func EntityGoneException(e error, transactionId, correlationId string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode:    http.StatusGone,
+		ErrorCode:     EntityGoneError, //resource no longer available
+		ErrorMessage:  "EntityGoneError",
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		ErrorDetails:  e.Error(),
+		err:           e,
+	}
+}
+
+func EntityConflictException(e error, transactionId, correlationId string) *ErrorResponse {
+	return &ErrorResponse{
+		StatusCode:    http.StatusConflict,
+		ErrorCode:     EntityConflictError,
+		ErrorMessage:  "EntityConflictError", //a request conflicts with current resource state, updates, versions
+		TransactionId: transactionId,
+		CorrelationId: correlationId,
+		ErrorDetails:  e.Error(),
+		err:           e,
+	}
+}
 func EntityNotFoundException(e error, transactionId, correlationId string) *ErrorResponse {
 	return &ErrorResponse{
 		StatusCode:    http.StatusNotFound,
