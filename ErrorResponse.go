@@ -73,7 +73,7 @@ func EntityUnauthorizedException(e error, transactionId, correlationId string) *
 
 func TransactionForbiddenException(e error, transactionId, correlationId string) *ErrorResponse {
 	return &ErrorResponse{
-		StatusCode:    http.StatusUnauthorized,
+		StatusCode:    http.StatusForbidden,
 		ErrorCode:     TransactionForbiddenError,
 		ErrorMessage:  "TransactionForbiddenError",
 		TransactionId: transactionId,
